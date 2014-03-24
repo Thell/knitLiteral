@@ -1,0 +1,16 @@
+Package: knitLiteral
+Type: Package
+Title: Literal Verbatim Knitr Chunks
+Version: 1.0
+Date: 2014-03-23
+Author: Thell Fowler
+Maintainer: Thell Fowler <thell@tbfowler.name>
+Description: Output chunks for knitr tutorials.
+Roxygen: list(wrap = FALSE)
+Suggests:
+    knitr (>= 1.5),
+    formatR (>= 0.10),
+    markdown (>= 0.6.4),
+    rmarkdown,
+    testthat
+License: GPL (>= 3)

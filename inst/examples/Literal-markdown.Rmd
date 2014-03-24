@@ -1,0 +1,263 @@
+---
+title: "knit literal knitr chunks"
+author: "Thell"
+date: "03/23/2014"
+output:
+  html_document:
+    highlight: pygments
+    includes:
+      after_body: ../css/literalize.css
+    self_contained: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r "knitr-setup", include=FALSE, cache=FALSE}
+knitLiteral::kast_on()
+```
+
+About
+========================
+
+The knitLiteral package gives authors the ability to easily output
+the exact the source of a chunk without side-effects. It is simple
+to use; just remember that knitr processes chunk options as they occur
+and options can occur more than once.
+
+The main option that knitLiteral allows is `literal=TRUE`. This
+option allows you to generate the output you literally want to use
+in knitr to produce a result _without_ repeating yourself or
+breaking the parser. (_Notice the use of 4 backticks instead of
+the minimal 3 to allow R syntax highlighting to work._)
+
+If the _literal_ label is used more than once in a particular chunk
+and the options __end__ with `literal=TRUE` then only the final
+`literal=TRUE` will be removed, which allows for illustrating how
+the literal chunk was produced.
+
+Hook Setup
+========================
+
+It is very easy to initialize. Just `kast_on` in your setup chunk.
+
+````{r "knitr-setup", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE, results='asis'}
+````
+
+Examples
+========================
+
+## Basic
+
+All of the _Basic_ examples are achieved by simply adding the
+`literal=TRUE` option at the end of a normal chunk.
+
+### No output, caching only.
+
+This sets up the `example` chunk for later reuse.
+
+````{r "example", eval=FALSE, echo=FALSE, literal=TRUE}
+print('hello world!')
+print('hello again!')
+````
+
+### Default usage.
+
+````{r "example", literal=TRUE}
+````
+
+#### Global default comment set to NA:
+
+Set the global default for the `comment` param to more closely match
+console output using `opts_chunk$set(comment=NA)`
+`r knitr::opts_chunk$set(comment=NA)`
+
+````{r "example", literal=TRUE}
+````
+
+#### Override a global default comment:
+
+````{r "example", comment="override > ", literal=TRUE}
+````
+
+
+### Output combinations
+
+#### No echo:
+
+````{r "example", echo=FALSE, literal=TRUE}
+````
+
+#### Collapsed:
+
+````{r "example", collapse=TRUE, literal=TRUE}
+````
+
+#### Held:
+
+````{r "example", results='hold', literal=TRUE}
+````
+
+#### Collapsed & held:
+
+````{r "example", collapse=TRUE, results='hold', literal=TRUE}
+````
+
+## Intermediate
+
+### Echo with no-eval followed by no-echo held results:
+
+The next two chunks are shown as _literal_ _literal_ chunks to
+illustrate what can be done to achieve particular results.
+
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> "}
+````
+````{r "example", echo=FALSE, results='hold', opts.label="literal-reuse", literal=TRUE, indent="> "}
+````
+
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
+````
+````{r "example", echo=FALSE, results='hold', opts.label="literal-reuse"}
+````
+
+````{r "example", eval=FALSE}
+````
+````{r "example", echo=FALSE, results='hold'}
+````
+
+### Echo with no-eval followed by no-echo and collapsed results:
+
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> "}
+````
+````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse", literal=TRUE, indent="> "}
+````
+
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
+````
+````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse"}
+````
+
+````{r "example", eval=FALSE}
+````
+```{r "example", echo=FALSE, collapse=TRUE}
+```
+
+## Advanced
+
+### Silent Tidy of training chunk.
+
+Imagine having a chunk to use for training, but it needs tidying,
+and the tidying has nothing to do with the training. By taking
+advantage of how knitr handles chunk options a chunk can be
+silently turned into a nice example.
+
+1.  Starting with a cached chunk like this
+
+````{r "tidy-example", echo=FALSE, eval=FALSE, literal=TRUE}
+# This should not be displayed, it is just a note to myself
+
+# that this coding is horrible and would be _wrong_.
+
+##' Without a doubt!
+
+if ( ( knitr::opts_current$get("literal") == TRUE ) && ( knitr::opts_current$get("literal") == TRUE ) )
+  {
+  foo<-FALSE } else {
+    foo = TRUE
+  listfoo <- list( first="second", second="third", third="fourth", fourth=fifth, and="so on")
+}
+````
+
+2.  Then making a new knitr options template
+
+````{r "opt_template", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE}
+knitr::opts_template$set( "literal-tidy"=
+  list( literal=TRUE, echo=FALSE, eval=FALSE, tidy=TRUE,
+        tidy.opts=c( width.cutoff=50, keep.comment=FALSE,
+                     keep.blank.line=FALSE, replace.assign=TRUE)))
+````
+
+3.  And using it like this
+
+````{r "tidy-example", opts.label="literal-tidy", literal=TRUE, literal.opts=list(empty=TRUE)}
+````
+
+4.  Results in
+
+````{r "tidy-example", echo=FALSE, eval=FALSE, literal=TRUE, tidy=TRUE, tidy.opts=c("width.cutoff"=50, "keep.comment"=FALSE, "keep.blank.line"=FALSE, "replace.assign"=TRUE)}
+````
+
+A much better, although still bad, example.
+
+******
+
+# The pandoc markdown output.
+
+Typing this in the rmarkdown (`.Rmd`)
+
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse"}
+````
+````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse", opts.label="literal-reuse"}
+````
+````{r "example", eval=FALSE, opts.label="literal-reuse"}
+````
+````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse"}
+````
+
+yields this clearly indicated, clean markdown (`.md`) showing what to type for the
+markdown chunks, and what the results would be.
+
+    ````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
+    ````
+    ````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse"}
+    ````
+    ````{r "example", eval=FALSE}
+    ````
+    ````{r "example", echo=FALSE, collapse=TRUE}
+    ````
+
+# Styling Information
+
+## HTML Class Information.
+
+The knitr chunk `pre class` and `code class`.
+
+~~~~~~~~~~~{.html}
+<pre class="sourceCode knitr r markdown"><code class="sourceCode r">
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## CSS
+
+The style for the knitr blocks was accomplished by simply using four
+back ticks instead of three so the R syntax highlighter would work
+and by defining a style.
+
+~~~~~~ {.css}
+````{r "literalize.css", echo=FALSE, results='asis'}
+css <- system.file("css/literalize.css", package = "knitLiteral")
+css <- readLines(css)
+cat( css, sep="\n" )
+````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+````{r, echo=FALSE, results='asis'}
+if (is.null( knitr::opts_knit$get("rmarkdown.version") )) {
+  cat( css, sep="\n" )
+}
+````
+
+## Javascript for rmarkdown v1
+
+~~~~~~ {.javascript}
+````{r "literalize.js", echo=FALSE, results='asis'}
+js <- system.file("js/literalize.js", package = "knitLiteral")
+js <- readLines(js)
+cat( js, sep="\n" )
+````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+````{r, echo=FALSE, results='asis'}
+if (is.null( knitr::opts_knit$get("rmarkdown.version") )) {
+  cat( js, sep="\n" )
+}
+````
