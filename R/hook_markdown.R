@@ -6,40 +6,30 @@ hook_markdown_v1 <- function(before, options, envir, name="literal") {
   ##' output differently the results can be substantially cleaner.
   if (!before || !isTRUE( knitr::opts_current$get(name)) ) return ()
 
+  # Prepare block and chunk parameters.
   format <- "markdown"
   engine <- tolower(knitr::opts_chunk$get("engine"))
   params <- chop_params( knitr::opts_current$get("params.src"), name )
+
+  # Unamed chunks with default params don't need a space.
+  if( nzchar(params) ) {
+    params <- paste0( " ", params)
+  }
+
+  # "literal-literal" chunks.
   if( grepl("literal", params, fixed = TRUE) ) {
     format <- "markdown .literal"
   }
 
-  block.begin.prefix <- "~~~~~~ {"
-  block.begin.suffix <- "}"
-  block.begin <- sprintf( "%s.knitr .%s .%s %s",
-                          block.begin.prefix,
-                          engine,
-                          format,
-                          block.begin.suffix)
-  block.end <- "~~~~~~"
 
-  # Four '`'s instead of three so syntax highlight doesn't choke.
-  chunk.begin.prefix <- "    ````{r"
-  chunk.begin.suffix <- "}"
-  chunk.begin <- sprintf( "%s %s%s",
-                          chunk.begin.prefix,
-                          params,
-                          chunk.begin.suffix )
-  chunk.end <- "    ````"
+  pat <- block_patterns[["markdown_v1"]]
 
   code <- get_code(options, name)
+  if( isTRUE( pat$indent.code) && nzchar(code) ) {
+    code <- knitr:::indent_block( code, pat$code.leader )
+  }
 
-  block <- sprintf( "%s\n%s\n%s%s\n%s\n\n",
-                    block.begin,
-                    chunk.begin,
-                    code,
-                    chunk.end,
-                    block.end
-  )
+  block <- with( pat, knitr::knit_expand(text=pat$expansion) )
 
   return ( block )
 }
@@ -52,45 +42,36 @@ hook_markdown_v2 <- function(before, options, envir, name="literal") {
   ##' output differently the results can be substantially cleaner.
   if (!before || !isTRUE( knitr::opts_current$get(name)) ) return ()
 
+  # Prepare block and chunk parameters.
   format <- "markdown"
   engine <- tolower(knitr::opts_chunk$get("engine"))
   params <- chop_params( knitr::opts_current$get("params.src"), name )
+
+  # Unamed chunks with default params don't need a space.
+  if( nzchar(params) ) {
+    params <- paste0( " ", params)
+  }
+
+  # "literal-literal" chunks.
   if( grepl("literal", params, fixed = TRUE) ) {
     format <- "markdown .literal"
   }
 
-  block.begin.prefix <- "`````` {"
-  block.begin.suffix <- "}"
-  block.begin <- sprintf( "%s.knitr .%s .%s %s %s %s",
-                          block.begin.prefix,
-                          engine,
-                          format,
-                          ifelse( isTRUE(options$number),
-                                  ".number", ""),
-                          ifelse( !is.null(options$startFrom),
-                                  paste0( "startFrom=\"", options$startFrom, "\""),
-                                  ""),
-                          block.begin.suffix)
-  block.end <- "``````"
+  # "Pandoc numbered literal chunks.
+  if( isTRUE(options$number) ) {
+    format <- paste0( format, " .number")
+    if( ~is.null(options$startFrom) ) {
+      format <- paste0( format, " startFrom=\"", options$startFrom, "\"")
+    }
+  }
 
-  # Four '`'s instead of three so syntax highlight doesn't choke.
-  chunk.begin.prefix <- "````{r"
-  chunk.begin.suffix <- "}"
-  chunk.begin <- sprintf( "%s %s%s",
-                          chunk.begin.prefix,
-                          params,
-                          chunk.begin.suffix )
-  chunk.end <- "````"
-
+  pat <- block_patterns[["markdown_v2"]]
   code <- get_code(options, name)
+  if( isTRUE( pat$indent.code) && nzchar(code) ) {
+    code <- knitr:::indent_block( code, pat$code.leader )
+  }
 
-  block <- sprintf( "%s\n%s\n%s%s\n%s\n\n",
-                   block.begin,
-                   chunk.begin,
-                   code,
-                   chunk.end,
-                   block.end
-  )
+  block <- with( pat, knitr::knit_expand(text=pat$expansion) )
 
   return ( block )
 }
