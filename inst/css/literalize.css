@@ -19,4 +19,14 @@
     padding-left: 1em;
     border-left:thick solid rgba(0,0,0,.25);
   }
+  code.knitr {
+    background: rgba(0,0,0,.06);
+    padding-left: 1em;
+    border-left:thick solid rgba(0,0,0,.25);
+  }
+  code.knitr.literal {
+    background: rgba(0,0,0,.06);
+    padding-left: 1em;
+    border-left:thick solid rgba(0,0,0,.25);
+  }
 </style>
