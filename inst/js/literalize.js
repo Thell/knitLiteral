@@ -1,3 +1,4 @@
+<!-- knitLiteral support to left-align block -->
 <script>
   window.jQuery || document.write('<script src="http://code.jquery.com/jquery-latest.min.js"><\/script>')
 </script>

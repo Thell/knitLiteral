@@ -5,8 +5,6 @@ date: "03/23/2014"
 output:
   html_document:
     highlight: pygments
-    includes:
-      after_body: ../css/literalize.css
     self_contained: yes
     toc: yes
   pdf_document:
@@ -14,6 +12,7 @@ output:
 ---
 
 ```{r "knitr-setup", include=FALSE, cache=FALSE}
+# knitr-setup should be the first chunk in the document.
 knitLiteral::kast_on()
 ```
 
@@ -39,10 +38,18 @@ the literal chunk was produced.
 Hook Setup
 ========================
 
-It is very easy to initialize. Just `kast_on` in your setup chunk.
+It is very easy to initialize using `kast_on` in your first chunk.
 
 ````{r "knitr-setup", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE, results='asis'}
 ````
+
+It is very easy to style using `dye` in your closing chunk.
+
+````{r "include-after", echo=FALSE, results='asis', opts.label="literal"}
+# include-after should be the last chunk in the document.
+knitLiteral::dye()
+````
+
 
 Examples
 ========================
@@ -240,12 +247,6 @@ cat( css, sep="\n" )
 ````
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-````{r, echo=FALSE, results='asis'}
-if (is.null( knitr::opts_knit$get("rmarkdown.version") )) {
-  cat( css, sep="\n" )
-}
-````
-
 ## Javascript for rmarkdown v1
 
 ~~~~~~ {.javascript}
@@ -256,8 +257,5 @@ cat( js, sep="\n" )
 ````
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-````{r, echo=FALSE, results='asis'}
-if (is.null( knitr::opts_knit$get("rmarkdown.version") )) {
-  cat( js, sep="\n" )
-}
+````{r "include-after", echo=FALSE, results='asis'}
 ````
