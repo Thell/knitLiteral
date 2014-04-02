@@ -6,6 +6,6 @@
 
 <script defer>
   $(document).ready(function() {
-    $('.r').replaceText(/\s{4}\`\`\`\`/mg, "````", true)
+    $('.r').replaceText(/^\s{4}/mg, "", true)
   } );
 </script>
