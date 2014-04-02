@@ -1,6 +1,8 @@
 knitLiteral
 ===========
 
+[![Build Status](https://travis-ci.org/Thell/knitLiteral.svg?branch=master)](https://travis-ci.org/Thell/knitLiteral)
+
 A knitr hook to output chunks as you _intend_ them to be displayed
 for examples and tutorials.
 
