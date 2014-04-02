@@ -8,6 +8,7 @@
 #' @details Calls \code{knitr::opts_template$set()} for each
 #'   builtin option template for the matching \code{out.format}.
 #'
+#' @param name name of the hook; used to prefix option templates.
 #' @param out.format Name of out.format as given by
 #'  \code{opts_knit$get("out.format")}
 NULL

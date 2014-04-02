@@ -16,6 +16,8 @@ opt_templates_latex()
 opt_templates_markdown()
 }
 \arguments{
+\item{name}{name of the hook; used to prefix option templates.}
+
 \item{out.format}{Name of out.format as given by
 \code{opts_knit$get("out.format")}}
 }
