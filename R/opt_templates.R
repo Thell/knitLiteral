@@ -64,7 +64,13 @@ opt_templates_markdown <- function()
   "literal-quote"= list( literal=TRUE,
                          echo=FALSE,
                          indent="> ",
-                         results="markdown")
+                         results="markdown"),
+  "literal-literal"= list( literal=TRUE,
+                           eval=FALSE,
+                           echo=FALSE,
+                           indent="> ",
+                           literal.opts=list(empty=TRUE),
+                           results="markdown")
   )
 }
 

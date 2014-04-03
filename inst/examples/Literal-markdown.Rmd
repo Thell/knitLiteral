@@ -1,14 +1,15 @@
 ---
 title: "knit literal knitr chunks"
 author: "Thell"
-date: "03/23/2014"
+date: "04/03/2014"
 output:
   html_document:
-    highlight: pygments
-    self_contained: yes
     toc: yes
+    toc_depth: 4
   pdf_document:
     toc: yes
+    toc_depth: 4
+  word_document: default
 ---
 
 ```{r "knitr-setup", include=FALSE, cache=FALSE}
@@ -16,8 +17,7 @@ output:
 knitLiteral::kast_on()
 ```
 
-About
-========================
+# About
 
 The knitLiteral package gives authors the ability to easily output
 the exact the source of a chunk without side-effects. It is simple
@@ -35,12 +35,15 @@ and the options __end__ with `literal=TRUE` then only the final
 `literal=TRUE` will be removed, which allows for illustrating how
 the literal chunk was produced.
 
-Hook Setup
-========================
+The rmarkdown in this sample document should produce _very_ similar
+results using either rmarkdown v1 or v2 and using pandoc to generate
+Word, pdf or html output. Other output formats have not been tested.
+
+# Setup
 
 It is very easy to initialize using `kast_on` in your first chunk.
 
-````{r "knitr-setup", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE, results='asis'}
+````{r "knitr-setup", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE}
 ````
 
 It is very easy to style using `dye` in your closing chunk.
@@ -50,115 +53,185 @@ It is very easy to style using `dye` in your closing chunk.
 knitLiteral::dye()
 ````
 
+# Examples
 
-Examples
-========================
+Each sample shows the _Source_ along with the rendered _Literal_ and
+normal _Output_.
 
-## Basic
+## No output, caching only
 
-All of the _Basic_ examples are achieved by simply adding the
-`literal=TRUE` option at the end of a normal chunk.
+__Source__
+_Following the DRY principle this is the source for __all__ "example" chunks._
 
-### No output, caching only.
-
-This sets up the `example` chunk for later reuse.
-
-````{r "example", eval=FALSE, echo=FALSE, literal=TRUE}
+````{r "example", eval=FALSE, echo=FALSE, literal=TRUE, opts.label="literal-quote"}
 print('hello world!')
 print('hello again!')
 ````
 
-### Default usage.
+__Literal__
+
+````{r "example", eval=FALSE, echo=FALSE, literal=TRUE}
+````
+
+__Output__ (_none_)
+
+## Default
+
+__Source__
+
+````{r "example", literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", literal=TRUE}
 ````
 
-#### Global default comment set to NA:
+## Default comment
 
-Set the global default for the `comment` param to more closely match
-console output using `opts_chunk$set(comment=NA)`
+Set the global default `comment` option to match normal console output
+using `opts_chunk$set(comment=NA)`.
+
 `r knitr::opts_chunk$set(comment=NA)`
 
+__Source__
+
+````{r "example", literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
+
 ````{r "example", literal=TRUE}
 ````
 
-#### Override a global default comment:
+## Chunk comment
+
+__Source__
+
+````{r "example", comment="override > ", literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", comment="override > ", literal=TRUE}
 ````
 
+## No echo
 
-### Output combinations
+__Source__
 
-#### No echo:
+````{r "example", echo=FALSE, literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", echo=FALSE, literal=TRUE}
 ````
 
-#### Collapsed:
+## Collapse
+
+__Source__
+
+````{r "example", collapse=TRUE, literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", collapse=TRUE, literal=TRUE}
 ````
 
-#### Held:
+## Hold {#Hold}
+
+__Source__
+
+````{r "example", results='hold', literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", results='hold', literal=TRUE}
 ````
 
-#### Collapsed & held:
+## Collapse & hold
+
+__Source__
+
+````{r "example", collapse=TRUE, results='hold', literal=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
 
 ````{r "example", collapse=TRUE, results='hold', literal=TRUE}
 ````
 
-## Intermediate
+## Echo & no-eval, no-echo & hold combo
 
-### Echo with no-eval followed by no-echo held results:
+__Source__
 
-The next two chunks are shown as _literal_ _literal_ chunks to
-illustrate what can be done to achieve particular results.
-
-````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> "}
+````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-literal"}
 ````
+
 ````{r "example", echo=FALSE, results='hold', opts.label="literal-reuse", literal=TRUE, indent="> "}
 ````
 
+````{r "example", eval=FALSE, opts.label="literal-literal"}
+````
+
+````{r "example", echo=FALSE, results='hold', opts.label="literal-literal"}
+````
+
+__Rendered__ _(the normal output is the same as a simple [hold](#Hold))_
+
 ````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
 ````
+
 ````{r "example", echo=FALSE, results='hold', opts.label="literal-reuse"}
 ````
 
 ````{r "example", eval=FALSE}
 ````
+
 ````{r "example", echo=FALSE, results='hold'}
 ````
 
-### Echo with no-eval followed by no-echo and collapsed results:
+## Echo & no-eval, no-echo & collapse combo {#MDExample}
+
+__Source__
 
 ````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> "}
 ````
+
 ````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse", literal=TRUE, indent="> "}
 ````
 
+````{r "example", eval=FALSE, opts.label="literal-literal"}
+````
+
+````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-literal"}
+````
+
+__Rendered__
+
 ````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
 ````
+
 ````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse"}
 ````
 
 ````{r "example", eval=FALSE}
 ````
-```{r "example", echo=FALSE, collapse=TRUE}
-```
 
-## Advanced
+````{r "example", echo=FALSE, collapse=TRUE}
+````
 
-### Silent Tidy of training chunk.
+# Silent Tidy of training chunk.
 
 Imagine having a chunk to use for training, but it needs tidying,
 and the tidying has nothing to do with the training. By taking
 advantage of how knitr handles chunk options a chunk can be
 silently turned into a nice example.
 
-1.  Starting with a cached chunk like this
+Starting with a cached chunk like this
 
 ````{r "tidy-example", echo=FALSE, eval=FALSE, literal=TRUE}
 # This should not be displayed, it is just a note to myself
@@ -175,7 +248,7 @@ if ( ( knitr::opts_current$get("literal") == TRUE ) && ( knitr::opts_current$get
 }
 ````
 
-2.  Then making a new knitr options template
+Make a new options template like this
 
 ````{r "opt_template", include=FALSE, cache=FALSE, literal=TRUE, include=TRUE, echo=FALSE}
 knitr::opts_template$set( "literal-tidy"=
@@ -184,35 +257,23 @@ knitr::opts_template$set( "literal-tidy"=
                      keep.blank.line=FALSE, replace.assign=TRUE)))
 ````
 
-3.  And using it like this
+And use it like this
 
 ````{r "tidy-example", opts.label="literal-tidy", literal=TRUE, literal.opts=list(empty=TRUE)}
 ````
 
-4.  Results in
+To get results like this
 
 ````{r "tidy-example", echo=FALSE, eval=FALSE, literal=TRUE, tidy=TRUE, tidy.opts=c("width.cutoff"=50, "keep.comment"=FALSE, "keep.blank.line"=FALSE, "replace.assign"=TRUE)}
 ````
 
-A much better, although still bad, example.
+Which is a much better, although still bad, example.
 
-******
+# knit markdown output.
 
-# The pandoc markdown output.
-
-Typing this in the rmarkdown (`.Rmd`)
-
-````{r "example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse"}
-````
-````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse", opts.label="literal-reuse"}
-````
-````{r "example", eval=FALSE, opts.label="literal-reuse"}
-````
-````{r "example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse"}
-````
-
-yields this clearly indicated, clean markdown (`.md`) showing what to type for the
-markdown chunks, and what the results would be.
+If you are interested in keeping a clean and readable markdown file
+the following is the knitr generated markdown from the
+[Echo & no-eval, no-echo & collapse combo](#MDExample) example.
 
     ````{r "example", eval=FALSE, literal=TRUE, echo=FALSE}
     ````
@@ -225,7 +286,7 @@ markdown chunks, and what the results would be.
 
 # Styling Information
 
-## HTML Class Information.
+## HTML Classes
 
 The knitr chunk `pre class` and `code class`.
 
