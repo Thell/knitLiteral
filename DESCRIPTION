@@ -1,7 +1,7 @@
 Package: knitLiteral
 Type: Package
 Title: Literal Verbatim Knitr Chunks
-Version: 1.0
+Version: 0.1.0
 Date: 2014-03-23
 Author: Thell Fowler
 Maintainer: Thell Fowler <thell@tbfowler.name>
