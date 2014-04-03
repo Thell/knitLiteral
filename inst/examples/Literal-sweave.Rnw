@@ -1,0 +1,230 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Thell},
+            pdftitle={knit literal knitr chunks},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\title{knit literal knitr chunks}
+\author{Thell}
+\date{03/23/2014}
+
+\begin{document}
+
+<<"knitr-setup", include=FALSE, cache=FALSE>>=
+# knitr-setup should be the first chunk in the document.
+knitLiteral::kast_on()
+@
+
+\begin{center}
+\huge knit literal knitr chunks \\[0.2cm]
+\large \emph{Thell}\\[0.1cm]
+\large \emph{03/23/2014} \\
+\normalsize
+\end{center}
+
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\section{About}\label{about}
+
+The knitLiteral package gives authors the ability to easily output the
+exact the source of a chunk without side-effects. It is simple to use;
+just remember that knitr processes chunk options as they occur and
+options can occur more than once.
+
+The main option that knitLiteral allows is \texttt{literal=TRUE}. This
+option allows you to generate the output you literally want to use in
+knitr to produce a result \emph{without} repeating yourself or breaking
+the parser. (\emph{Notice the use of 4 backticks instead of the minimal
+3 to allow R syntax highlighting to work.})
+
+If the \emph{literal} label is used more than once in a particular chunk
+and the options \textbf{end} with \texttt{literal=TRUE} then only the
+final \texttt{literal=TRUE} will be removed, which allows for
+illustrating how the literal chunk was produced.
+
+\section{Hook Setup}\label{hook-setup}
+
+It is very easy to initialize using \texttt{kast\_on} in your first
+chunk.
+
+<<"knitr-setup", cache=FALSE, include=FALSE, literal=TRUE, include=TRUE, echo=FALSE>>=
+@
+
+It is very easy to style using \texttt{dye} in your closing chunk.
+
+<<"include-after", echo=FALSE, results='asis', opts.label="literal">>=
+# include-after should be the last chunk in the document.
+knitLiteral::dye()
+@
+
+\section{Examples}\label{examples}
+
+\subsection{Basic}\label{basic}
+
+All of the \emph{Basic} examples are achieved by simply adding the
+\texttt{literal=TRUE} option at the end of a normal chunk.
+
+\subsubsection{No output, caching only.}\label{no-output-caching-only.}
+
+This sets up the \texttt{example} chunk for later reuse.
+
+<<"example", eval=FALSE, echo=FALSE, literal=TRUE>>=
+print('hello world!')
+print('hello again!')
+@
+
+\subsubsection{Default usage.}\label{default-usage.}
+
+<<"example", literal=TRUE>>=
+@
+
+
+\subsubsection{Global default comment set to NA:}\label{global-default-comment-set-to-na}
+
+Set the global default for the \texttt{comment} param to more closely
+match console output using \texttt{opts\_chunk\$set(comment=NA)}
+
+\Sexpr{knitr::opts_chunk$set(comment=NA)}
+
+<<"example", literal=TRUE>>=
+@
+
+\subsubsection{Override a global default comment:}\label{override-a-global-default-comment}
+
+<<"example", comment="override > ", literal=TRUE>>=
+@
+
+\subsubsection{Output combinations}\label{output-combinations}
+
+No echo:
+
+<<"example", echo=FALSE, literal=TRUE>>=
+@
+
+Collapsed:
+
+<<"example", collapse=TRUE, literal=TRUE>>=
+@
+
+Held:
+
+<<"example", results='hold', literal=TRUE>>=
+@
+
+Collapsed \& held:
+
+<<"example", collapse=TRUE, results='hold', literal=TRUE>>=
+@
+
+\subsection{Intermediate}\label{intermediate}
+
+\subsubsection{Echo with no-eval followed by no-echo held
+results:}\label{echo-with-no-eval-followed-by-no-echo-held-results}
+
+The next two chunks are shown as \emph{literal} \emph{literal} chunks to
+illustrate what can be done to achieve particular results.
+
+<<"example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> ">>=
+@
+<<"example", echo=FALSE, results='hold', opts.label="literal-reuse", literal=TRUE, indent="> ">>=
+@
+
+<<"example", eval=FALSE, literal=TRUE, echo=FALSE>>=
+@
+
+<<"example", echo=FALSE, results='hold', opts.label="literal-reuse">>=
+@
+
+<<"example", eval=FALSE>>=
+@
+
+<<"example", echo=FALSE, results='hold'>>=
+@
+
+\subsubsection{Echo with no-eval followed by no-echo and collapsed
+results:}\label{echo-with-no-eval-followed-by-no-echo-and-collapsed-results}
+
+=============================================================
+
+<<"example", eval=FALSE, literal=TRUE, echo=FALSE, opts.label="literal-reuse", indent="> ">>=
+@
+<<"example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse", literal=TRUE, indent="> ">>=
+@
+
+<<"example", eval=FALSE, literal=TRUE, echo=FALSE>>=
+@
+<<"example", echo=FALSE, collapse=TRUE, opts.label="literal-reuse">>=
+@
+
+<<"example", eval=FALSE>>=
+@
+<<r "example", echo=FALSE, collapse=TRUE>>=
+@
+
+\end{document}

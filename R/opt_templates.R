@@ -41,7 +41,24 @@ opt_templates_html <- function()
 #' @export
 opt_templates_latex <- function()
 {
-  #' @details Not implemented yet.
+  list(
+    "literal"= list( literal=TRUE,
+                     eval=FALSE,
+                     echo=FALSE,
+                     results="markdown"),
+    "literal-eval"= list( literal=TRUE,
+                          echo=FALSE,
+                          results="markdown"),
+    "literal-reuse"= list( literal=TRUE,
+                           eval=FALSE,
+                           echo=FALSE,
+                           results="markdown",
+                           literal.opts=list(empty=TRUE)),
+    "literal-quote"= list( literal=TRUE,
+                           echo=FALSE,
+                           indent="> ",
+                           results="markdown")
+  )
 }
 
 #' @rdname opt_template
