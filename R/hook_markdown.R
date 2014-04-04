@@ -60,7 +60,7 @@ hook_markdown_v2 <- function(before, options, envir, name="literal") {
   # "Pandoc numbered literal chunks.
   if( isTRUE(options$number) ) {
     format <- paste0( format, " .number")
-    if( ~is.null(options$startFrom) ) {
+    if( !is.null(options$startFrom) ) {
       format <- paste0( format, " startFrom=\"", options$startFrom, "\"")
     }
   }
