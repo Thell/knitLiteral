@@ -27,7 +27,7 @@ hook_latex <- function(before, options, envir, name="literal")
   pat <- block_patterns[["latex"]]
 
   block <- with( pat, knitr::knit_expand(text=pat$expansion) )
-  browser()
+
   return ( block )
 
 }
