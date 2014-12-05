@@ -3,13 +3,24 @@
 #' This object is a named list of built-in block level pattern texts.
 #' @export
 block_patterns = list(
-  `rnw` = list(
-    block.begin.prefix = '',
+  `latex` = list(
+    block.begin.prefix = '\\begin{alltt}',
     block.begin.suffix = '',
-    block.end = '',
+    block.end = '\\end{alltt}\n\\end{kframe}\n\n\\begin{kframe}',
     chunk.begin.prefix = '<<',
     chunk.begin.suffix = '>>=',
-    chunk.end = '@'
+    chunk.end = '@',
+    indent.code = FALSE,
+    code.leader = '',
+    expansion = paste( "{{block.begin.prefix}}",
+                       "{{block.begin.suffix}}\n",
+                       "{{chunk.begin.prefix}}",
+                       "{{params}}",
+                       "{{chunk.begin.suffix}}\n",
+                       "{{code}}",
+                       "{{chunk.end}}\n",
+                       "{{block.end}}\n",
+                       collpase='', sep='')
   ),
 
   `brew` = list(''),
